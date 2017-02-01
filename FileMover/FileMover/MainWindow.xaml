@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileMover"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="650">
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="Col_1"/>
@@ -47,8 +47,8 @@
             Grid.RowSpan="2">
             Choose a File To move:
         </Label>
-        <TextBox AutoWordSelection="True" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" BorderBrush="Black" Height="20" Width="221" Margin="0,11,0,75"/>
-        <Button BorderBrush="Black" BorderThickness="1" Width="100" Grid.Column="2" Margin="49,10,24,75" Grid.Row="1" Padding="0">
+        <TextBox Name="SourceFilePath" AutoWordSelection="True" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" BorderBrush="Black" Height="20" Width="221" Margin="0,11,0,75"/>
+        <Button Name="ChooseFile" BorderBrush="Black" BorderThickness="1" Width="100" Grid.Column="2" Margin="49,10,24,75" Grid.Row="1" Padding="0" Click="ChooseFile_Click">
             Choose File
         </Button>
         <Label 
@@ -58,14 +58,23 @@
             Grid.Row="1">
             Choose a new location:
         </Label>
-        <Button BorderBrush="Black" BorderThickness="1" Width="100" Grid.Column="2" Margin="49,66,24,20" Grid.Row="1" Content="Choose Location" Padding="0"/>
+        <TextBox Name="DestinationPath" AutoWordSelection="True" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" BorderBrush="Black" Height="20" Width="221" Margin="0,66,0,20"/>
+        <Button Name="ChooseDestination"
+                Click="ChooseDestination_Click"
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                Width="100" 
+                Grid.Column="2" 
+                Margin="49,66,24,20" 
+                Grid.Row="1" 
+                Content="Choose Location" 
+                Padding="0"/>
 
         <ProgressBar Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
                      BorderBrush="Black"
                      BorderThickness="5"
                      Height="20"
                      Margin="15"/>
-        <TextBox AutoWordSelection="True" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" BorderBrush="Black" Height="20" Width="221" Margin="0,66,0,20"/>
 
 
     </Grid>
