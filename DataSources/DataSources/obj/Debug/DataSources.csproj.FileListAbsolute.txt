@@ -1,7 +1,0 @@
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\bin\Debug\DataSources.exe.config
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\bin\Debug\DataSources.exe
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\bin\Debug\DataSources.pdb
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\bin\Debug\System.Data.SQLite.dll
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\bin\Debug\System.Data.SQLite.pdb
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\obj\Debug\DataSources.exe
-D:\Documents\My Learning\Sandbox\DataSources\DataSources\obj\Debug\DataSources.pdb
