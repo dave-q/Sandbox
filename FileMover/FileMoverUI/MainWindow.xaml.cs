@@ -15,16 +15,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 
-namespace FileMover
+namespace FileMoverUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Model ViewModel { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
+            ViewModel = new Model(new FileMover.FileMover_PInvoke());
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -48,6 +50,32 @@ namespace FileMover
             {
                 DestinationPath.Text = selectFolderDialog.SelectedPath;
             }
+        }
+
+        public void UpdateProgressBar(decimal progress)
+        {
+            this.ProgressBar.Value = (double)progress;
+        }
+
+        private async void Move_Click(object sender, RoutedEventArgs e)
+        {
+            this.InfoMessage.Foreground = Brushes.Black;
+            this.InfoMessage.Content = "Moving...";
+            var result = await ViewModel.MoveAsync(this.SourceFilePath.Text, this.DestinationPath.Text, UpdateProgressBar);
+            this.InfoMessage.Content = result.Message;
+            if (result.Success)
+            {
+                this.InfoMessage.Foreground = Brushes.Green;
+            } 
+            else
+            {
+                this.InfoMessage.Foreground = Brushes.Red;
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Cancel();
         }
     }
 }
