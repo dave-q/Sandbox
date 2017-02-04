@@ -1,9 +1,12 @@
 ﻿using FileMover;
 using FileMoverModel;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace FileMoverUI
+namespace FileMover
 {
     public class Model
     {
@@ -19,8 +22,8 @@ namespace FileMoverUI
             fileMover.SourcePath = sourcePath;
             fileMover.DestinationPath = destinationPath;
             fileMover.ProgressUpdater = UpdateProgress;
-            var success = await fileMover.MoveAsync();
-            return new ActionOutCome(success, fileMover.ReturnMessage);
+            await fileMover.MoveAsync();
+            return new ActionOutCome(fileMover.Success, fileMover.ReturnMessage);
         }
 
         public void Cancel()

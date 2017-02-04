@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FileMoverUI.Properties
+namespace FileMover.Properties
 {
 
 

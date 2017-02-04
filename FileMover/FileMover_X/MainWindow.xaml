@@ -1,11 +1,11 @@
-﻿<Window x:Class="FileMoverUI.MainWindow"
+﻿<Window x:Class="FileMover.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FileMoverUI"
+        xmlns:local="clr-namespace:FileMover"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="650">
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="Col_1"/>
@@ -75,13 +75,12 @@
                 BorderThickness="1"
                 Width="100"
                 Height="25"
+                Grid.Column="1"
                 Grid.Row="2"
                 Content="Move File"
                 VerticalAlignment="Top" 
                 HorizontalAlignment="Left"
-                Click="Move_Click" 
-                Grid.ColumnSpan="2" 
-                Margin="140,0,0,0"/>
+                Click="Move_Click"/>
         <Button Name="Cancel"
                 BorderBrush="Black"
                 BorderThickness="1"
@@ -92,7 +91,7 @@
                 Content="Cancel"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top" 
-                Click="Cancel_Click" Grid.ColumnSpan="2" Margin="0,0,145,0"/>
+                Click="Cancel_Click"/>
 
         <ProgressBar 
             Name="ProgressBar"

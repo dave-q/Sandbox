@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24FE9B8C-9A71-40D3-BC82-267993EC0C77}</ProjectGuid>
+    <ProjectGuid>{3353789A-719E-4638-90A0-306500B4DD64}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileMover</RootNamespace>
+    <RootNamespace>FileMoverUI</RootNamespace>
     <AssemblyName>FileMover</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
