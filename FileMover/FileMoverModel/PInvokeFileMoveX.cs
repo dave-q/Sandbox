@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -34,9 +35,9 @@ namespace FileMoverModel
                 StreamBytesTransferred,
                 notUsed,
                 CallbackReason,
-                hSourceFile,
-                hDestinationFile,
-                lpData
+                sourceFileHandle,
+                destinationFileHandle,
+                notUsed2
             ) =>
             {
                 var progressResult = CopyProgressResult.PROGRESS_CONTINUE;
@@ -56,29 +57,47 @@ namespace FileMoverModel
                 return progressResult;
             };
         }
-        delegate CopyProgressResult CopyProgressRoutine(long TotalFileSize, long TotalBytesTransferred, long StreamSize, long StreamBytesTransferred, uint notUsed, CopyProgressCallbackReason CallbackReason, IntPtr hSourceFile, IntPtr hDestinationFile, IntPtr lpData);
+        delegate CopyProgressResult CopyProgressRoutine(long TotalFileSize, long TotalBytesTransferred, long StreamSize, long StreamBytesTransferred, uint notUsed, CopyProgressCallbackReason CallbackReason, IntPtr sourceFileHandle, IntPtr destinationFileHandle, IntPtr notUsed2);
 
         public async Task<bool> MoveFile()
         {
-            var success = await Task.Run<bool>(()=> MoveFileWithProgress(SourcePath, DestinationPath, new CopyProgressRoutine(CopyProgressFunc), IntPtr.Zero, MoveFileFlags.MOVE_FILE_COPY_ALLOWED | MoveFileFlags.MOVE_FILE_REPLACE_EXISTSING | MoveFileFlags.MOVE_FILE_WRITE_THROUGH));
-            if (!success && !_cancelled)
+            var success = await Task.Run<Tuple<bool,int>>(() =>
             {
-                var failedEventArgs = new FileMoveEventArgs(0M);
-                ProgressCallback(failedEventArgs);
-                ThrowLastWin32Exception();
-            }
-            else if (!success && _cancelled)
+                var _success =  MoveFileWithProgress(SourcePath,
+                    DestinationPath,
+                    new CopyProgressRoutine(CopyProgressFunc),
+                    IntPtr.Zero,
+                    MoveFileFlags.MOVE_FILE_COPY_ALLOWED | MoveFileFlags.MOVE_FILE_REPLACE_EXISTSING | MoveFileFlags.MOVE_FILE_WRITE_THROUGH);
+
+                var errorCode = Marshal.GetLastWin32Error();
+
+                return new Tuple<bool, int>(_success, errorCode);
+            });
+
+            if (!success.Item1)
             {
-                var cancelledEventArgs = new FileMoveEventArgs(0M);
-                ProgressCallback(cancelledEventArgs);
+                if (success.Item2 == CANCELLED_ERROR_CODE) //ie it failed because the user cancelled the execution we dont to thrown an exception
+                {
+                    var lastErrorCode = success.Item2;
+                    Debug.WriteLine(lastErrorCode);
+                    var cancelledEventArgs = new FileMoveEventArgs(0M);
+                    ProgressCallback(cancelledEventArgs);
+                }
+                else
+                {
+                    var failedEventArgs = new FileMoveEventArgs(0M);
+                    ProgressCallback(failedEventArgs);
+                    throw new Win32Exception(success.Item2);
+                }
             }
             else
             {
-                //doing this as small files, never get called back from the Win32 method and hence the progress is never updated, so this is make sure 100% is return
+                //doing this as small files, never get called back from the Win32 method and hence the progress is never updated, so this is make sure 100% is returned once it is complete
                 var completeEventArgs = new FileMoveEventArgs(100M);
                 ProgressCallback(completeEventArgs);
             }
-            return success;
+            return success.Item1;
+            
         }
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
@@ -89,7 +108,7 @@ namespace FileMoverModel
             IntPtr notNeeded, 
             MoveFileFlags CopyFlags);
 
-        Func<long, long, long, long, uint, CopyProgressCallbackReason, IntPtr, IntPtr, IntPtr, CopyProgressResult> CopyProgressFunc;
+        CopyProgressRoutine CopyProgressFunc;
 
         private decimal CalculateProgress(long totalSize, long transferredSize)
         {
@@ -102,10 +121,8 @@ namespace FileMoverModel
         }
 
 
-        private static void ThrowLastWin32Exception()
-        {
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
+        const int CANCELLED_ERROR_CODE = 1235;
+
 
         enum CopyProgressResult : uint
         {
@@ -131,15 +148,5 @@ namespace FileMoverModel
             MOVE_FILE_CREATE_HARDLINK = 0x00000010,
             MOVE_FILE_FAIL_IF_NOT_TRACKABLE = 0x00000020
         }
-        //delegate CopyProgressResult CopyProgressRoutine(
-        //long TotalFileSize,
-        //long TotalBytesTransferred,
-        //long StreamSize,
-        //long StreamBytesTransferred,
-        //uint dwStreamNumber,
-        //CopyProgressCallbackReason dwCallbackReason,
-        //IntPtr hSourceFile,
-        //IntPtr hDestinationFile,
-        //IntPtr lpData);
     }
 }

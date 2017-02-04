@@ -49,6 +49,19 @@ namespace FileMoverModel
             {
                 var mover = new PInvokeFileMoveX(SourcePath, DestinationPath, ProgressCallback);
                 success = await mover.MoveFile();
+                if (success)
+                {
+                    ReturnMessage = "Moved Successfully";
+                }
+                else if (!success && _cancelled)
+                {
+                    ReturnMessage = "Cancelled";
+                }
+                else
+                {
+                    //shouldnt get here as the mover.movefile should an throw exception if it fails and it wasnt cancelled but just incase
+                    ReturnMessage = "An error occurred";
+                }
             }
             catch (Exception x)
             {
@@ -58,20 +71,7 @@ namespace FileMoverModel
             finally
             {
                 IsMoving = false;
-            }
-            Success = success;
-            if (success)
-            {
-                ReturnMessage = "Moved Successfully";
-            }
-            else if (!success && _cancelled)
-            {
-                ReturnMessage = "Cancelled";
-            }
-            else
-            {
-                //shouldnt get here as the mover.movefile should an throw exception if it fails and it wasnt cancelled but just incase
-                ReturnMessage = "An error occurred";
+                Success = success;
             }
             return success;
 
