@@ -29,6 +29,7 @@ namespace FileMover
 
         public void Cancel()
         {
+            //Some Comments to create a git commit
             if (FileMover.IsMoving)
             {
                 FileMover.Cancel();
