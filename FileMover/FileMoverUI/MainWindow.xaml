@@ -81,8 +81,9 @@
                 HorizontalAlignment="Left"
                 Click="Move_Click" 
                 Grid.ColumnSpan="2" 
-                Margin="140,0,0,0"/>
+                Margin="95,0,0,0"/>
         <Button Name="Cancel"
+                Visibility="{Binding IsMoving}"
                 BorderBrush="Black"
                 BorderThickness="1"
                 Width="100"
@@ -92,7 +93,7 @@
                 Content="Cancel"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top" 
-                Click="Cancel_Click" Grid.ColumnSpan="2" Margin="0,0,145,0"/>
+                Click="Cancel_Click" Margin="0,0,33,0"/>
 
         <ProgressBar 
             Name="ProgressBar"
@@ -109,5 +110,15 @@
             Grid.RowSpan="3"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"/>
+        <Button x:Name="Copy"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Width="100"
+            Height="25"
+            Grid.Row="2"
+            Content="Copy File"
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left"
+            Click="Copy_Click" Grid.Column="1" Margin="156,0,0,0" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>
